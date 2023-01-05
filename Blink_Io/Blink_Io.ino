@@ -14,7 +14,8 @@
 #include <IoAbstractionWire.h>
 //#include <Wire.h>
 
-#define LED_PIN 4
+#define MCP23017_LED 4
+#define PCF8574_LED  4
 
 // create an IO abstractions for the Arduino, MCP23017 and PCF8574
 BasicIoAbstraction arduino = internalDigitalDevice();
@@ -27,14 +28,14 @@ void setup() {
 
   // set up the led pins as outputs on each device
   arduino.pinMode(LED_BUILTIN, OUTPUT);
-  mcp23017.pinMode(LED_PIN, OUTPUT);
-  pcf8574.pinMode(LED_PIN, OUTPUT);
+  mcp23017.pinMode(MCP23017_LED, OUTPUT);
+  pcf8574.pinMode(PCF8574_LED, OUTPUT);
 }
 
 void loop() {
   arduino.digitalWrite(LED_BUILTIN, HIGH);  
-  mcp23017.digitalWrite(LED_PIN, HIGH);  
-  pcf8574.digitalWrite(LED_PIN, HIGH);
+  mcp23017.digitalWrite(MCP23017_LED, HIGH);  
+  pcf8574.digitalWrite(PCF8574_LED, HIGH);
   
   // sync the expanders after write and before delay
   mcp23017.sync();
@@ -42,8 +43,8 @@ void loop() {
   delay(1000);
   
   arduino.digitalWrite(LED_BUILTIN, LOW);
-  mcp23017.digitalWrite(LED_PIN, LOW); 
-  pcf8574.digitalWrite(LED_PIN, LOW);
+  mcp23017.digitalWrite(MCP23017_LED, LOW); 
+  pcf8574.digitalWrite(PCF8574_LED, LOW);
 
   // sync the expanders after write and before delay
   mcp23017.sync();
