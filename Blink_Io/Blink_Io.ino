@@ -1,7 +1,7 @@
 /*
  * Blink_Io
  * 
- * A skectch to demonstrate how to modify Blink to use the IoAbstraction
+ * A sketch to demonstrate how to modify Blink to use the IoAbstraction
  * library to control the MCP23017 and PCF8574 Digital Expanders.
  * 
  * Note that the expanders require seperate I2C addresses. On the PCF8574, 
@@ -16,29 +16,37 @@
 
 #define LED_PIN 4
 
-BasicIoAbstraction ioBoard = internalDigitalDevice();
-MCP23017IoAbstraction ioExpander0(0x20, IO_PIN_NOT_DEFINED, &Wire);
-PCF8574IoAbstraction  ioExpander1(0x21, IO_PIN_NOT_DEFINED, &Wire);
+// create an IO abstractions for the Arduino, MCP23017 and PCF8574
+BasicIoAbstraction arduino = internalDigitalDevice();
+MCP23017IoAbstraction mcp23017(0x20);
+PCF8574IoAbstraction pcf8574(0x21, IO_PIN_NOT_DEFINED);
 
 void setup() {
+  // Initialise wire to enable the I2C connection
   Wire.begin();
-  ioBoard.pinMode(LED_BUILTIN, OUTPUT);
-  ioExpander0.pinMode(LED_PIN, OUTPUT);
-  ioExpander1.pinMode(LED_PIN, OUTPUT);
+
+  // set up the led pins as outputs on each device
+  arduino.pinMode(LED_BUILTIN, OUTPUT);
+  mcp23017.pinMode(LED_PIN, OUTPUT);
+  pcf8574.pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
-  ioBoard.digitalWrite(LED_BUILTIN, HIGH);  
-  ioExpander0.digitalWrite(LED_PIN, HIGH);  
-  ioExpander1.digitalWrite(LED_PIN, HIGH);
-  ioExpander0.sync();
-  ioExpander1.sync();
+  arduino.digitalWrite(LED_BUILTIN, HIGH);  
+  mcp23017.digitalWrite(LED_PIN, HIGH);  
+  pcf8574.digitalWrite(LED_PIN, HIGH);
+  
+  // sync the expanders after write and before delay
+  mcp23017.sync();
+  pcf8574.sync();
   delay(1000);
   
-  ioBoard.digitalWrite(LED_BUILTIN, LOW);
-  ioExpander0.digitalWrite(LED_PIN, LOW); 
-  ioExpander1.digitalWrite(LED_PIN, LOW);
-  ioExpander0.sync();
-  ioExpander1.sync();
+  arduino.digitalWrite(LED_BUILTIN, LOW);
+  mcp23017.digitalWrite(LED_PIN, LOW); 
+  pcf8574.digitalWrite(LED_PIN, LOW);
+
+  // sync the expanders after write and before delay
+  mcp23017.sync();
+  pcf8574.sync();
   delay(1000); 
 }
