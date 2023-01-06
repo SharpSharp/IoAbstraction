@@ -1,5 +1,5 @@
 /*
- * Blink_Io
+ * Blink_MultiIo
  * 
  * A sketch to demonstrate how to modify Blink to use the IoAbstraction
  * library to control the MCP23017 and PCF8574 Digital Expanders.
