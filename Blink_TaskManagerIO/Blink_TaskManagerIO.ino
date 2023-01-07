@@ -2,13 +2,11 @@
  * Blink_TaskManagerIO
  * 
  * A sketch to demonstrate how to modify Blink to use the IoAbstraction
- * library to control the MCP23017 and PCF8574 Digital Expanders.
- * This version uses multi IO Abstraction which  allows the same code 
- * to use an IoExpander instead of direct divices and pins. 
+ * library to control the MCP23017 and PCF8574 Digital Expanders. 
  * 
- * TaskManagerIO is implimented to enable the removal of delay().
+ * TaskManagerIO is implemented to enable the removal of delay().
  * This results in the loop() being near empty, with the code moved 
- * into an invert LED fucntion
+ * to an invert LED fucntion
  * 
  * Note that the expanders require seperate I2C addresses. On the PCF8574, 
  * change the A0 jumper from J2 to J4 to set the address to 0x21.
@@ -46,17 +44,22 @@ void setup() {
   multiIo.pinMode(LED_BUILTIN,  OUTPUT);
   multiIo.pinMode(MCP23017_LED, OUTPUT);
   multiIo.pinMode(PCF8574_LED,  OUTPUT);
-
-  // a task that inverts the led every second
-  taskManager.scheduleFixedRate(1000, invertLED);
+  // switchOnLED is scheduled to run every 2000 milliseconds.
+  taskManager.scheduleFixedRate(2000,switchOnLED);
 }
-
-// a call back method that gets called once a second from the schedule
-void invertLED() {
-  bool LEDState = multiIo.digitalRead(LED_BUILTIN);
-  multiIo.digitalWrite(LED_BUILTIN,  !LEDState);
-  multiIo.digitalWrite(MCP23017_LED, !LEDState);
-  multiIo.digitalWrite(PCF8574_LED,  !LEDState);
+// a call back method that gets called once every 2 seconds from the schedule
+void switchOnLED() {
+  multiIo.digitalWrite(LED_BUILTIN, HIGH);
+  multiIo.digitalWrite(MCP23017_LED, HIGH);
+  multiIo.digitalWrite(PCF8574_LED, HIGH);
+  multiIo.sync();
+  taskManager.scheduleOnce(1000,switchOffLED);
+}
+// a call back method that gets called one second after switchOnLED
+void switchOffLED(){
+  multiIo.digitalWrite(LED_BUILTIN, LOW);
+  multiIo.digitalWrite(MCP23017_LED, LOW);
+  multiIo.digitalWrite(PCF8574_LED, LOW);
   multiIo.sync();
 }
 
