@@ -22,8 +22,8 @@
 
 #define MCP23017_LED 104
 #define PCF8574_LED 124
-#define MCP23017_PIN 103
-#define PCF8574_PIN 123
+#define MCP23017_SWITCH 103
+#define PCF8574_SWITCH 123
 
 // create a multi Io that allocates the first 100 pins to arduino pins
 MultiIoAbstraction multiIo(EXPANDER);
@@ -37,17 +37,17 @@ void onSwitchPress(uint8_t key, bool held) {
   // check the switch was presses and not held
   if (!held) { 
     // toggle the state of the built in LED and LEDs on the expanders.
-    uint8_t ledState = multiIo.digitalRead(LED_BUILTIN);
+    uint8_t LEDState = multiIo.digitalRead(LED_BUILTIN);
   
-    multiIo.digitalWrite(LED_BUILTIN,  !ledState);
+    multiIo.digitalWrite(LED_BUILTIN,  !LEDState);
     
-    if (key == MCP23017_PIN) {
-      ledState = multiIo.digitalRead(MCP23017_LED);
-      multiIo.digitalWrite(MCP23017_LED, !ledState);
+    if (key == MCP23017_SWITCH) {
+      LEDState = multiIo.digitalRead(MCP23017_LED);
+      multiIo.digitalWrite(MCP23017_LED, !LEDState);
     }
-    if (key == PCF8574_PIN) {
-      ledState = multiIo.digitalRead(PCF8574_LED);
-      multiIo.digitalWrite(PCF8574_LED,  !ledState);
+    if (key == PCF8574_SWITCH) {
+      LEDState = multiIo.digitalRead(PCF8574_LED);
+      multiIo.digitalWrite(PCF8574_LED,  !LEDState);
     }
   } 
   Serial.print("Switch ");
@@ -73,8 +73,8 @@ void setup() {
   // set up the button the expander. we choose poll everything but you could
   // also SWITCHES_POLL_KEYS_ONLY and SWITCHES_NO_POLLING for interrupt mode.
   switches.init(asIoRef(multiIo), SWITCHES_POLL_EVERYTHING, true);
-  switches.addSwitch(MCP23017_PIN, onSwitchPress);
-  switches.addSwitch(PCF8574_PIN, onSwitchPress);
+  switches.addSwitch(MCP23017_SWITCH, onSwitchPress);
+  switches.addSwitch(PCF8574_SWITCH, onSwitchPress);
 
   Serial.begin(115200);
 }
