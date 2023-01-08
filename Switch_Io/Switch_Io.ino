@@ -1,4 +1,18 @@
-
+/*
+ * Blink_Io
+ * 
+ * A sketch to demonstrate how to use the IoAbstraction and TaskManagerIO
+ * libraries to control the MCP23017 and PCF8574 Digital Expanders.
+ * This version uses multi IO Abstraction so the pin numbers are unique.
+ * TaskManagerIO handles the input switches which are controlling the
+ * output switches
+ * 
+ * Note that the expanders require seperate I2C addresses. On the PCF8574, 
+ * change the A0 jumper from J2 to J4 to set the address to 0x21.
+ * 
+ * https://github.com/davetcc/IoAbstraction
+ */
+ 
 #include <IoAbstraction.h>
 #include <IoAbstractionWire.h>
 #include <TaskManagerIO.h>
