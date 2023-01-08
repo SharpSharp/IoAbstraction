@@ -34,20 +34,22 @@ PCF8574IoAbstraction  pcf8574(0x21, IO_PIN_NOT_DEFINED);
 
 // when the switch is pressed then this function will be called.
 void onSwitchPress(uint8_t key, bool held) {
-  // toggle the state of the built in LED and LEDs on the expanders.
-  uint8_t ledState = multiIo.digitalRead(LED_BUILTIN);
-
-  multiIo.digitalWrite(LED_BUILTIN,  !ledState);
+  // check the switch was presses and not held
+  if (!held) { 
+    // toggle the state of the built in LED and LEDs on the expanders.
+    uint8_t ledState = multiIo.digitalRead(LED_BUILTIN);
   
-  if (key == MCP23017_PIN) {
-    ledState = multiIo.digitalRead(MCP23017_LED);
-    multiIo.digitalWrite(MCP23017_LED, !ledState);
-  }
-  if (key == PCF8574_PIN) {
-    ledState = multiIo.digitalRead(PCF8574_LED);
-    multiIo.digitalWrite(PCF8574_LED,  !ledState);
-  }
-
+    multiIo.digitalWrite(LED_BUILTIN,  !ledState);
+    
+    if (key == MCP23017_PIN) {
+      ledState = multiIo.digitalRead(MCP23017_LED);
+      multiIo.digitalWrite(MCP23017_LED, !ledState);
+    }
+    if (key == PCF8574_PIN) {
+      ledState = multiIo.digitalRead(PCF8574_LED);
+      multiIo.digitalWrite(PCF8574_LED,  !ledState);
+    }
+  } 
   Serial.print("Switch ");
   Serial.print(key);
   Serial.println(held ? " Held down" : " Pressed");
