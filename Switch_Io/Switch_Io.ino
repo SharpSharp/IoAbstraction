@@ -22,7 +22,8 @@
 
 #define MCP23017_LED 104
 #define PCF8574_LED 124
-#define SWITCH_PIN 103
+#define MCP23017_PIN 103
+#define PCF8574_PIN 123
 
 // create a multi Io that allocates the first 100 pins to arduino pins
 MultiIoAbstraction multiIo(EXPANDER);
@@ -63,7 +64,8 @@ void setup() {
   // set up the button the expander. we choose poll everything but you could
   // also SWITCHES_POLL_KEYS_ONLY and SWITCHES_NO_POLLING for interrupt mode.
   switches.init(asIoRef(multiIo), SWITCHES_POLL_EVERYTHING, true);
-  switches.addSwitch(SWITCH_PIN, onSwitchPress);
+  switches.addSwitch(MCP23017_PIN, onSwitchPress);
+  switches.addSwitch(PCF8574_PIN, onSwitchPress);
 
   Serial.begin(115200);
 }
