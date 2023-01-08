@@ -38,8 +38,15 @@ void onSwitchPress(uint8_t key, bool held) {
   uint8_t ledState = multiIo.digitalRead(LED_BUILTIN);
 
   multiIo.digitalWrite(LED_BUILTIN,  !ledState);
-  multiIo.digitalWrite(MCP23017_LED, !ledState);
-  multiIo.digitalWrite(PCF8574_LED,  !ledState);
+  
+  if (key == MCP23017_PIN) {
+    ledState = multiIo.digitalRead(MCP23017_LED);
+    multiIo.digitalWrite(MCP23017_LED, !ledState);
+  }
+  if (key == PCF8574_PIN) {
+    ledState = multiIo.digitalRead(PCF8574_LED);
+    multiIo.digitalWrite(PCF8574_LED,  !ledState);
+  }
 
   Serial.print("Switch ");
   Serial.print(key);
